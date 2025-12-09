@@ -29,7 +29,7 @@ Stenocon displays two icons (L and R) side by side. By combining mouse button pr
 ### Try It Locally
 
 ```bash
-git clone https://github.com/your-username/stenocon.git
+git clone https://github.com/maribotto/stenocon.git
 cd stenocon
 # Open demo.html in your browser
 
