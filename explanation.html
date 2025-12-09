@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stenocon - Explanation</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            border-bottom: 2px solid #0f3460;
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            color: #3498db;
+            margin-top: 40px;
+            border-bottom: 1px solid #0f3460;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #2ecc71;
+            margin-top: 30px;
+        }
+
+        .diagram-container {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .diagram-container svg {
+            width: 100%;
+            height: auto;
+        }
+
+        pre {
+            background: #0f3460;
+            border-radius: 8px;
+            padding: 15px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            border: 1px solid #0f3460;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #0f3460;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background: rgba(15, 52, 96, 0.3);
+        }
+
+        ul {
+            padding-left: 25px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        .color-l { color: #3b82f6; font-weight: bold; }
+        .color-r { color: #ef4444; font-weight: bold; }
+        .color-lr { color: #22c55e; font-weight: bold; }
+        .color-rl { color: #eab308; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stenocon Selection Logic</h1>
+
+        <h2>Concept Diagram</h2>
+        <div class="diagram-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+                <style>
+                    text { font-family: sans-serif; }
+                    .title { font-size: 16px; fill: #333; }
+                    .label { font-size: 14px; font-weight: bold; }
+                    .note { font-size: 12px; fill: #555; }
+                </style>
+
+                <!-- Title text -->
+                <text x="30" y="30" class="title">- 4 icons behind one icon</text>
+                <text x="30" y="55" class="title">- buttons: only LMB and RMB</text>
+
+                <!-- Main container (sketch rectangle) -->
+                <rect x="120" y="90" width="360" height="180" fill="none" stroke="#999" stroke-width="2" rx="5"/>
+
+                <!-- LR box (green, left) -->
+                <rect x="140" y="110" width="50" height="50" fill="none" stroke="#22c55e" stroke-width="3" rx="4"/>
+                <text x="165" y="142" class="label" text-anchor="middle" fill="#22c55e">LR</text>
+
+                <!-- L box (blue, center-left) -->
+                <rect x="200" y="110" width="50" height="50" fill="none" stroke="#3b82f6" stroke-width="3" rx="4"/>
+                <text x="225" y="142" class="label" text-anchor="middle" fill="#3b82f6">L</text>
+
+                <!-- R box (red, center-right) -->
+                <rect x="350" y="110" width="50" height="50" fill="none" stroke="#ef4444" stroke-width="3" rx="4"/>
+                <text x="375" y="142" class="label" text-anchor="middle" fill="#ef4444">R</text>
+
+                <!-- RL box (yellow, right) -->
+                <rect x="410" y="110" width="50" height="50" fill="none" stroke="#eab308" stroke-width="3" rx="4"/>
+                <text x="435" y="142" class="label" text-anchor="middle" fill="#eab308">RL</text>
+
+                <!-- Connection lines from L to LR -->
+                <line x1="200" y1="135" x2="190" y2="135" stroke="#333" stroke-width="2"/>
+
+                <!-- Connection lines from R to RL -->
+                <line x1="400" y1="135" x2="410" y2="135" stroke="#333" stroke-width="2"/>
+
+                <!-- Connection lines down to book/page icon -->
+                <line x1="225" y1="160" x2="290" y2="200" stroke="#333" stroke-width="2"/>
+                <line x1="375" y1="160" x2="310" y2="200" stroke="#333" stroke-width="2"/>
+
+                <!-- Book/page icon (represents the stenocon unit) -->
+                <rect x="280" y="200" width="40" height="50" fill="none" stroke="#333" stroke-width="2" rx="3"/>
+                <line x1="300" y1="200" x2="300" y2="250" stroke="#333" stroke-width="1"/>
+                <text x="288" y="230" class="label" fill="#3b82f6" font-size="12">L</text>
+                <text x="305" y="230" class="label" fill="#ef4444" font-size="12">R</text>
+
+                <!-- Bottom note -->
+                <text x="30" y="320" class="title">- undo selection by releasing buttons</text>
+                <text x="40" y="345" class="title">in reverse order</text>
+
+                <!-- Legend at bottom -->
+                <g transform="translate(30, 365)">
+                    <rect x="0" y="0" width="16" height="16" fill="none" stroke="#3b82f6" stroke-width="2" rx="2"/>
+                    <text x="22" y="13" class="note">L = LMB</text>
+
+                    <rect x="90" y="0" width="16" height="16" fill="none" stroke="#ef4444" stroke-width="2" rx="2"/>
+                    <text x="112" y="13" class="note">R = RMB</text>
+
+                    <rect x="180" y="0" width="16" height="16" fill="none" stroke="#22c55e" stroke-width="2" rx="2"/>
+                    <text x="202" y="13" class="note">LR = LMB+RMB</text>
+
+                    <rect x="310" y="0" width="16" height="16" fill="none" stroke="#eab308" stroke-width="2" rx="2"/>
+                    <text x="332" y="13" class="note">RL = RMB+LMB</text>
+                </g>
+            </svg>
+        </div>
+
+        <h2>Video Demonstrations</h2>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin: 20px 0;">
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/9v0Tn9rg1wI?si=9P7Tn-YmE-0-AXCr" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/3PMcCJ5e280?si=NOcIh2lx8fuyiRAV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+
+        <h2>State Variables</h2>
+        <pre><code>activeElement  = null     // Active stenocon element
+lmbDown        = false    // Is LMB held down
+rmbDown        = false    // Is RMB held down
+firstButton    = null     // Which was pressed first: 'lmb' | 'rmb' | null
+selectionMade  = false    // Has a selection been made (blocks new selections)
+swapped        = false    // Modifier (Shift) or page switch (Tab) active</code></pre>
+
+        <h2>handleMouseDown(e)</h2>
+        <pre><code>IF selectionMade == true:
+    RETURN (requires full release before new selection)
+
+activeElement = clicked element
+
+IF e.button == LMB AND lmbDown == false:
+    lmbDown = true
+    IF firstButton == null:
+        firstButton = 'lmb'
+
+IF e.button == RMB AND rmbDown == false:
+    rmbDown = true
+    IF firstButton == null:
+        firstButton = 'rmb'
+
+update visuals</code></pre>
+
+        <h2>handleMouseUp(e)</h2>
+        <pre><code>IF activeElement == null OR selectionMade == true:
+    update released button state (lmbDown/rmbDown = false)
+    IF both released:
+        resetState()
+    RETURN
+
+swapped = modifierActive OR pageSwitch
+
+IF e.button == LMB (LMB was released):
+
+    IF lmbDown AND rmbDown AND firstButton == 'rmb':
+        // RMB first, LMB second, LMB released = RL selection
+        selection = swapped ? 'R' : 'RL'
+        make selection
+        selectionMade = true
+
+    ELSE IF lmbDown AND NOT rmbDown AND firstButton == 'lmb':
+        // Only LMB was pressed and released = L selection
+        selection = swapped ? 'LR' : 'L'
+        make selection
+        selectionMade = true
+
+    // ELSE: LMB released but RMB was first and still held = cancel
+
+    lmbDown = false
+
+IF e.button == RMB (RMB was released):
+
+    IF lmbDown AND rmbDown AND firstButton == 'lmb':
+        // LMB first, RMB second, RMB released = LR selection
+        selection = swapped ? 'L' : 'LR'
+        make selection
+        selectionMade = true
+
+    ELSE IF rmbDown AND NOT lmbDown AND firstButton == 'rmb':
+        // Only RMB was pressed and released = R selection
+        selection = swapped ? 'RL' : 'R'
+        make selection
+        selectionMade = true
+
+    // ELSE: RMB released but LMB was first and still held = cancel
+
+    rmbDown = false
+
+update visuals
+
+IF NOT lmbDown AND NOT rmbDown:
+    resetState()  // Full reset when both buttons released</code></pre>
+
+        <h2>Selection Logic Summary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>Result (normal)</th>
+                    <th>Result (swapped)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>LMB click</td>
+                    <td><span class="color-l">L</span></td>
+                    <td><span class="color-lr">LR</span></td>
+                </tr>
+                <tr>
+                    <td>RMB click</td>
+                    <td><span class="color-r">R</span></td>
+                    <td><span class="color-rl">RL</span></td>
+                </tr>
+                <tr>
+                    <td>LMB down &rarr; RMB down &rarr; RMB up</td>
+                    <td><span class="color-lr">LR</span></td>
+                    <td><span class="color-l">L</span></td>
+                </tr>
+                <tr>
+                    <td>RMB down &rarr; LMB down &rarr; LMB up</td>
+                    <td><span class="color-rl">RL</span></td>
+                    <td><span class="color-r">R</span></td>
+                </tr>
+                <tr>
+                    <td>LMB down &rarr; RMB down &rarr; LMB up</td>
+                    <td>cancel</td>
+                    <td>cancel</td>
+                </tr>
+                <tr>
+                    <td>RMB down &rarr; LMB down &rarr; RMB up</td>
+                    <td>cancel</td>
+                    <td>cancel</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Cancellation Logic</h2>
+        <p>Selection is cancelled if buttons are released in the "wrong" order:</p>
+        <ul>
+            <li>If the first button is released before the second (when both are held)</li>
+            <li>Selection only occurs when the <strong>second</strong> button is released</li>
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stenocon Demo - RPG Inventaario</title>
+    <!-- SVG Icon definitions -->
+    <svg style="display: none;">
+        <defs>
+            <!-- Lähitaisteluaseet -->
+            <symbol id="icon-miekka" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M6.92 5L5 7l6 6-3.5 3.5 1.42 1.42L12.5 14l1.5 1.5-1.42 1.42 1.42 1.42L17.5 15l-1.5-1.5L22 7.5V2h-5.5L10 8.5 6.92 5zM19 6.5L14.5 11l-1-1L18 5.5l1 1z"/>
+            </symbol>
+            <symbol id="icon-kirves" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 2L8 6v2H6v2l-4 4 2 2 4-4h2v-2l2-2v8l-2 2v4h4v-4l-2-2V8l6-6h-6z"/>
+            </symbol>
+            <symbol id="icon-keihas" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M18.36 2.64L12 9l-1.41-1.41-2.83 2.83L9.17 12l-6.34 6.34 1.41 1.41L10.59 13l1.41 1.41 2.83-2.83L13.41 10l6.95-6.95-1-1zM5 3L2 6l3 3 3-3-3-3z"/>
+            </symbol>
+            <symbol id="icon-vasara" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M2 19.63L13.43 8.2l-1.41-1.41 2.82-2.83 4.24 4.24-2.82 2.83-1.42-1.42L3.41 21 2 19.63zM18.36 8.46l1.41-1.41-4.24-4.24-1.41 1.41 4.24 4.24z"/>
+            </symbol>
+
+            <!-- Etäaseet -->
+            <symbol id="icon-jousi" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 2C9.5 2 7.25 3.5 6.28 5.72L4 5l1 3-3 1 .72 2.28C.5 12.25 2 14.5 2 17c0 2.76 2.24 5 5 5 2.5 0 4.75-1.5 5.72-3.72L15 19l-1-3 3-1-.72-2.28C18.5 11.75 22 9.5 22 7c0-2.76-2.24-5-5-5-2.5 0-4.75 1.5-5.72 3.72L9 5l1 3-3 1 .72 2.28z"/>
+            </symbol>
+            <symbol id="icon-heittotahti" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 1l2.5 7.5H22l-6 4.5 2.5 7.5L12 16l-6.5 4.5L8 13 2 8.5h7.5L12 1z"/>
+            </symbol>
+            <symbol id="icon-heittotikari" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M5.12 14.12L12 7.24l4.76 4.76-6.88 6.88-4.76-4.76zM14 3l-1 1 3 3 1-1-3-3zM3 21l6-2-4-4-2 6z"/>
+            </symbol>
+            <symbol id="icon-linko" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 2C8.5 2 5.5 4.5 5 8H3l3 4 3-4H7c.5-2.5 2.5-4 5-4s4.5 1.5 5 4h-2l3 4 3-4h-2c-.5-3.5-3.5-6-7-6zM7 15v7h2v-5h6v5h2v-7H7z"/>
+            </symbol>
+
+            <!-- Loitsut -->
+            <symbol id="icon-tulipallo" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 23c-3.9 0-7-3.1-7-7 0-2.5 1.5-4.5 3-6.5s3-4.2 3-6.5c0 0 1 2.5 2 4 .5.8 1 1.5 1.5 2.5.5-1 1-2 1.5-2.5 1.5-1.5 2-3 2-4 0 2.3 1.5 4.5 3 6.5s3 4 3 6.5c0 3.9-3.1 7-7 7z"/>
+            </symbol>
+            <symbol id="icon-jaavasama" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M19 3L5 17l4 4L23 7l-4-4zM5.5 21.5L2 22l.5-3.5L5.5 21.5zM14 6l4 4-8.5 8.5-4-4L14 6z"/>
+            </symbol>
+            <symbol id="icon-salama" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M11 2L6 13h4l-1 9 8-12h-5l3-8z"/>
+            </symbol>
+            <symbol id="icon-kuolemansade" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 2C9.24 2 7 4.24 7 7c0 1.8 1 3.4 2.5 4.2V13H8v2h1.5v1H8v2h1.5v4h5v-4H16v-2h-1.5v-1H16v-2h-1.5v-1.8c1.5-.8 2.5-2.4 2.5-4.2 0-2.76-2.24-5-5-5zm-1 5.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5z"/>
+            </symbol>
+        </defs>
+    </svg>
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .instructions {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Inventory section */
+        .inventory {
+            background: #16213e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .inventory h2 {
+            margin-top: 0;
+            color: #fff;
+            border-bottom: 2px solid #0f3460;
+            padding-bottom: 10px;
+        }
+
+        .category {
+            margin-bottom: 20px;
+        }
+
+        .category h3 {
+            color: #aaa;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .stenocon-grid {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* Stenocon icon pair */
+        .stenocon {
+            position: relative;
+            width: 120px;
+            height: 60px;
+            background: #0f3460;
+            border-radius: 8px;
+            display: flex;
+            overflow: visible;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .stenocon:hover {
+            transform: scale(1.05);
+        }
+
+        .stenocon-half {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+            transition: all 0.15s;
+            padding: 4px;
+            text-align: center;
+            gap: 2px;
+            position: relative;
+        }
+
+        .item-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
+        }
+
+        .item-label {
+            font-size: 9px;
+            line-height: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+
+        /* Primary item (L/R) */
+        .stenocon-half .primary-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        /* Combo item (LR/RL) - floating popup, hidden by default */
+        .stenocon-half .combo-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #1a1a2e;
+            border: 2px solid #555;
+            border-radius: 6px;
+            padding: 6px;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        /* Left combo floats to the left */
+        .stenocon-half.left .combo-item {
+            right: 100%;
+            margin-right: 8px;
+        }
+
+        /* Right combo floats to the right */
+        .stenocon-half.right .combo-item {
+            left: 100%;
+            margin-left: 8px;
+        }
+
+        .stenocon-half .combo-item.visible {
+            opacity: 1;
+        }
+
+        /* Combo item highlighted when it will be selected */
+        .stenocon-half.left .combo-item.highlighted {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .stenocon-half.right .combo-item.highlighted {
+            border-color: #f1c40f;
+            background: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
+        }
+
+        .stenocon-half.left {
+            background: rgba(52, 152, 219, 0.3);
+            border-right: 1px solid #0a2540;
+        }
+
+        .stenocon-half.right {
+            background: rgba(231, 76, 60, 0.3);
+        }
+
+        /* Highlight colors for primary when active */
+        .stenocon-half.left.active {
+            background: rgba(52, 152, 219, 0.5);
+        }
+
+        .stenocon-half.left.active .primary-item {
+            color: #3498db;
+        }
+
+        .stenocon-half.right.active {
+            background: rgba(231, 76, 60, 0.5);
+        }
+
+        .stenocon-half.right.active .primary-item {
+            color: #e74c3c;
+        }
+
+        /* Use slots */
+        .use-slots {
+            background: #16213e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .use-slots h2 {
+            margin-top: 0;
+            color: #fff;
+            border-bottom: 2px solid #0f3460;
+            padding-bottom: 10px;
+        }
+
+        .slots-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .use-slot {
+            width: 100px;
+            height: 80px;
+            background: #0f3460;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .use-slot.selected {
+            border-color: #e94560;
+            box-shadow: 0 0 15px rgba(233, 69, 96, 0.5);
+        }
+
+        .use-slot .slot-number {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .use-slot .slot-content {
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            text-align: center;
+        }
+
+        .use-slot .slot-content.empty {
+            color: #555;
+        }
+
+        .slot-icon {
+            width: 32px;
+            height: 32px;
+            color: #fff;
+        }
+
+        .use-slot.drag-hover {
+            border-color: #2ecc71;
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* Legend */
+        .legend {
+            background: #16213e;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .legend h2 {
+            margin-top: 0;
+            color: #fff;
+            border-bottom: 2px solid #0f3460;
+            padding-bottom: 10px;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+        }
+
+        .legend-color.blue { background: #3498db; }
+        .legend-color.red { background: #e74c3c; }
+        .legend-color.green { background: #2ecc71; }
+        .legend-color.yellow { background: #f1c40f; }
+
+        /* Feedback message */
+        .feedback {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e94560;
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .feedback.visible {
+            opacity: 1;
+        }
+
+        /* Modifier indicator */
+        .modifier-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e94560;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .modifier-indicator.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Stenocon Demo</h1>
+        <p class="instructions">
+            LMB = L (sininen) | RMB = R (punainen) | LMB+RMB = LR (vihreä) | RMB+LMB = RL (keltainen)<br>
+            Numerot 1-4 valitsevat käyttöslotin | Shift = modifier | Tab = sivunvaihto
+        </p>
+
+        <div class="inventory">
+            <h2>Inventaario</h2>
+
+            <div class="category">
+                <h3>Lähitaisteluaseet</h3>
+                <div class="stenocon-grid" id="melee">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>Etäaseet</h3>
+                <div class="stenocon-grid" id="ranged">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+
+            <div class="category">
+                <h3>Loitsut</h3>
+                <div class="stenocon-grid" id="spells">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <div class="use-slots">
+            <h2>Käyttöslotit</h2>
+            <div class="slots-container" id="use-slots">
+                <!-- Generated by JS -->
+            </div>
+        </div>
+
+        <div class="legend">
+            <h2>Värikoodit</h2>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-color blue"></div>
+                    <span>L = LMB klikkaus</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color red"></div>
+                    <span>R = RMB klikkaus</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color green"></div>
+                    <span>LR = LMB + RMB</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color yellow"></div>
+                    <span>RL = RMB + LMB</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="modifier-indicator" id="modifier-indicator">SHIFT</div>
+
+    <script>
+        // Inventory data from ESIMERKKI.md
+        const inventoryData = {
+            melee: [
+                {
+                    L: 'Miekka', R: 'Kirves', LR: 'Keihäs', RL: 'Vasara',
+                    iconL: 'miekka', iconR: 'kirves', iconLR: 'keihas', iconRL: 'vasara'
+                }
+            ],
+            ranged: [
+                {
+                    L: 'Jousi', R: 'Heittotähti', LR: 'Heittotikari', RL: 'Linko',
+                    iconL: 'jousi', iconR: 'heittotahti', iconLR: 'heittotikari', iconRL: 'linko'
+                }
+            ],
+            spells: [
+                {
+                    L: 'Tulipallo', R: 'Jäävasama', LR: 'Salama', RL: 'Kuolemansäde',
+                    iconL: 'tulipallo', iconR: 'jaavasama', iconLR: 'salama', iconRL: 'kuolemansade'
+                }
+            ]
+        };
+
+        // State
+        let selectedSlot = 0;
+        const useSlots = ['', '', '', ''];
+        let modifierActive = false;
+        let pageSwitch = false;
+
+        // Stenocon interaction state
+        let activeElement = null;
+        let lmbDown = false;
+        let rmbDown = false;
+        let firstButton = null; // 'lmb' or 'rmb'
+        let selectionMade = false; // Prevents multiple selections until full reset
+        let pendingSelection = null; // Current selection type being previewed
+        let pendingItemName = null; // Item name for drag
+
+        // Create stenocon element
+        function createStenocon(data, index) {
+            const el = document.createElement('div');
+            el.className = 'stenocon';
+            el.dataset.index = index;
+            el.dataset.L = data.L;
+            el.dataset.R = data.R;
+            el.dataset.LR = data.LR;
+            el.dataset.RL = data.RL;
+            el.dataset.iconL = data.iconL;
+            el.dataset.iconR = data.iconR;
+            el.dataset.iconLR = data.iconLR;
+            el.dataset.iconRL = data.iconRL;
+            el.innerHTML = `
+                <div class="stenocon-half left">
+                    <div class="combo-item">
+                        <svg class="item-icon"><use href="#icon-${data.iconLR}"/></svg>
+                        <span class="item-label">${data.LR}</span>
+                    </div>
+                    <div class="primary-item">
+                        <svg class="item-icon"><use href="#icon-${data.iconL}"/></svg>
+                        <span class="item-label">${data.L}</span>
+                    </div>
+                </div>
+                <div class="stenocon-half right">
+                    <div class="combo-item">
+                        <svg class="item-icon"><use href="#icon-${data.iconRL}"/></svg>
+                        <span class="item-label">${data.RL}</span>
+                    </div>
+                    <div class="primary-item">
+                        <svg class="item-icon"><use href="#icon-${data.iconR}"/></svg>
+                        <span class="item-label">${data.R}</span>
+                    </div>
+                </div>
+            `;
+
+            // Prevent context menu
+            el.addEventListener('contextmenu', e => e.preventDefault());
+
+            // Mouse events
+            el.addEventListener('mousedown', handleMouseDown);
+
+            return el;
+        }
+
+        function handleMouseDown(e) {
+            e.preventDefault();
+
+            // If a selection was already made, require full release before new interaction
+            if (selectionMade) return;
+
+            const stenocon = e.currentTarget;
+            activeElement = stenocon;
+
+            if (e.button === 0 && !lmbDown) { // LMB
+                lmbDown = true;
+                if (!firstButton) firstButton = 'lmb';
+            } else if (e.button === 2 && !rmbDown) { // RMB
+                rmbDown = true;
+                if (!firstButton) firstButton = 'rmb';
+            }
+
+            updateVisuals(stenocon);
+        }
+
+        function handleMouseUp(e) {
+            if (!activeElement || selectionMade) {
+                // Check if we can reset now (both buttons released)
+                if (e.button === 0) lmbDown = false;
+                if (e.button === 2) rmbDown = false;
+                if (!lmbDown && !rmbDown) {
+                    resetState();
+                }
+                return;
+            }
+
+            const stenocon = activeElement;
+            const swapped = modifierActive || pageSwitch;
+
+            // Determine what happens based on which button was released
+            if (e.button === 0) { // LMB released
+                if (lmbDown && rmbDown && firstButton === 'rmb') {
+                    // RMB was first, LMB second, now LMB released = RL selection
+                    const selection = swapped ? 'R' : 'RL';
+                    makeSelection(stenocon, selection);
+                    selectionMade = true;
+                } else if (lmbDown && !rmbDown && firstButton === 'lmb') {
+                    // Only LMB was pressed and released = L selection
+                    const selection = swapped ? 'LR' : 'L';
+                    makeSelection(stenocon, selection);
+                    selectionMade = true;
+                }
+                // If LMB released but RMB was first and still down = cancel (wrong order)
+                lmbDown = false;
+            } else if (e.button === 2) { // RMB released
+                if (lmbDown && rmbDown && firstButton === 'lmb') {
+                    // LMB was first, RMB second, now RMB released = LR selection
+                    const selection = swapped ? 'L' : 'LR';
+                    makeSelection(stenocon, selection);
+                    selectionMade = true;
+                } else if (rmbDown && !lmbDown && firstButton === 'rmb') {
+                    // Only RMB was pressed and released = R selection
+                    const selection = swapped ? 'RL' : 'R';
+                    makeSelection(stenocon, selection);
+                    selectionMade = true;
+                }
+                // If RMB released but LMB was first and still down = cancel (wrong order)
+                rmbDown = false;
+            }
+
+            updateVisuals(stenocon);
+
+            // Full reset only when both buttons are released
+            if (!lmbDown && !rmbDown) {
+                resetState();
+            }
+        }
+
+        function handleMouseLeave(e) {
+            // Cancel if mouse leaves the stenocon area
+            if (activeElement) {
+                resetVisuals(activeElement);
+                resetState();
+            }
+        }
+
+        function resetState() {
+            if (activeElement) {
+                resetVisuals(activeElement);
+            }
+            activeElement = null;
+            lmbDown = false;
+            rmbDown = false;
+            firstButton = null;
+            selectionMade = false;
+            pendingSelection = null;
+            pendingItemName = null;
+        }
+
+        function updateVisuals(stenocon) {
+            if (!stenocon) return;
+
+            const leftHalf = stenocon.querySelector('.stenocon-half.left');
+            const rightHalf = stenocon.querySelector('.stenocon-half.right');
+            const leftCombo = leftHalf.querySelector('.combo-item');
+            const rightCombo = rightHalf.querySelector('.combo-item');
+
+            // Reset
+            leftHalf.classList.remove('active');
+            rightHalf.classList.remove('active');
+            leftCombo.classList.remove('visible', 'highlighted');
+            rightCombo.classList.remove('visible', 'highlighted');
+
+            if (selectionMade) return; // Don't update visuals after selection
+
+            const swapped = modifierActive || pageSwitch;
+
+            if (lmbDown && rmbDown) {
+                // Both pressed - show combo highlighted based on first button
+                if (firstButton === 'lmb') {
+                    // LMB first, RMB second = will be LR when RMB released
+                    leftHalf.classList.add('active');
+                    leftCombo.classList.add('visible', 'highlighted');
+                    if (swapped) {
+                        pendingSelection = 'L';
+                    } else {
+                        pendingSelection = 'LR';
+                    }
+                } else {
+                    // RMB first, LMB second = will be RL when LMB released
+                    rightHalf.classList.add('active');
+                    rightCombo.classList.add('visible', 'highlighted');
+                    if (swapped) {
+                        pendingSelection = 'R';
+                    } else {
+                        pendingSelection = 'RL';
+                    }
+                }
+            } else if (lmbDown) {
+                // LMB down - show L active, and LR combo floating beside it (no highlight yet)
+                leftHalf.classList.add('active');
+                leftCombo.classList.add('visible');
+                if (swapped) {
+                    pendingSelection = 'LR';
+                } else {
+                    pendingSelection = 'L';
+                }
+            } else if (rmbDown) {
+                // RMB down - show R active, and RL combo floating beside it (no highlight yet)
+                rightHalf.classList.add('active');
+                rightCombo.classList.add('visible');
+                if (swapped) {
+                    pendingSelection = 'RL';
+                } else {
+                    pendingSelection = 'R';
+                }
+            } else {
+                pendingSelection = null;
+            }
+
+            // Update pending item for drag preview
+            if (pendingSelection) {
+                pendingItemName = stenocon.dataset[pendingSelection];
+            } else {
+                pendingItemName = null;
+            }
+        }
+
+        function resetVisuals(stenocon) {
+            if (!stenocon) return;
+
+            const leftHalf = stenocon.querySelector('.stenocon-half.left');
+            const rightHalf = stenocon.querySelector('.stenocon-half.right');
+            const leftCombo = leftHalf.querySelector('.combo-item');
+            const rightCombo = rightHalf.querySelector('.combo-item');
+
+            leftHalf.classList.remove('active');
+            rightHalf.classList.remove('active');
+            leftCombo.classList.remove('visible', 'highlighted');
+            rightCombo.classList.remove('visible', 'highlighted');
+        }
+
+        // Map item names to icon IDs
+        const itemIconMap = {
+            'Miekka': 'miekka', 'Kirves': 'kirves', 'Keihäs': 'keihas', 'Vasara': 'vasara',
+            'Jousi': 'jousi', 'Heittotähti': 'heittotahti', 'Heittotikari': 'heittotikari', 'Linko': 'linko',
+            'Tulipallo': 'tulipallo', 'Jäävasama': 'jaavasama', 'Salama': 'salama', 'Kuolemansäde': 'kuolemansade'
+        };
+
+        // Store both name and icon for use slots
+        const useSlotIcons = ['', '', '', ''];
+
+        function makeSelection(stenocon, type) {
+            const itemName = stenocon.dataset[type];
+            const iconKey = 'icon' + type;
+            const iconId = stenocon.dataset[iconKey];
+            useSlots[selectedSlot] = itemName;
+            useSlotIcons[selectedSlot] = iconId;
+            updateUseSlots();
+            showFeedback(`${itemName} → Slotti ${selectedSlot + 1}`);
+        }
+
+        function showFeedback(message) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.classList.add('visible');
+            setTimeout(() => feedback.classList.remove('visible'), 1500);
+        }
+
+        function updateUseSlots() {
+            const container = document.getElementById('use-slots');
+            container.innerHTML = '';
+
+            for (let i = 0; i < 4; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'use-slot' + (i === selectedSlot ? ' selected' : '');
+                slot.dataset.slotIndex = i;
+
+                let contentHtml;
+                if (useSlots[i] && useSlotIcons[i]) {
+                    contentHtml = `
+                        <svg class="slot-icon"><use href="#icon-${useSlotIcons[i]}"/></svg>
+                        <div class="slot-content">${useSlots[i]}</div>
+                    `;
+                } else {
+                    contentHtml = `<div class="slot-content empty">Tyhjä</div>`;
+                }
+
+                slot.innerHTML = `
+                    <div class="slot-number">${i + 1}</div>
+                    ${contentHtml}
+                `;
+                slot.addEventListener('click', () => {
+                    selectedSlot = i;
+                    updateUseSlots();
+                });
+                container.appendChild(slot);
+            }
+        }
+
+        // Global mouse event handlers for proper tracking
+        document.addEventListener('mouseup', handleMouseUp);
+
+        // Track which slot is being hovered for drag & drop
+        let hoveredSlotIndex = null;
+
+        document.addEventListener('mousemove', e => {
+            if (!activeElement || selectionMade || !pendingSelection) {
+                // Clear all hover states when not dragging
+                document.querySelectorAll('.use-slot').forEach(s => s.classList.remove('drag-hover'));
+                hoveredSlotIndex = null;
+                return;
+            }
+
+            // Check if hovering over a use slot
+            const slots = document.querySelectorAll('.use-slot');
+            hoveredSlotIndex = null;
+            slots.forEach(slot => {
+                const slotRect = slot.getBoundingClientRect();
+                if (e.clientX >= slotRect.left && e.clientX <= slotRect.right &&
+                    e.clientY >= slotRect.top && e.clientY <= slotRect.bottom) {
+                    hoveredSlotIndex = parseInt(slot.dataset.slotIndex);
+                    slot.classList.add('drag-hover');
+                } else {
+                    slot.classList.remove('drag-hover');
+                }
+            });
+        });
+
+        // Modified handleMouseUp to support drag & drop
+        const originalHandleMouseUp = handleMouseUp;
+        handleMouseUp = function(e) {
+            // Check for drag & drop first
+            if (activeElement && pendingSelection && !selectionMade && hoveredSlotIndex !== null) {
+                const itemName = activeElement.dataset[pendingSelection];
+                const iconKey = 'icon' + pendingSelection;
+                const iconId = activeElement.dataset[iconKey];
+                useSlots[hoveredSlotIndex] = itemName;
+                useSlotIcons[hoveredSlotIndex] = iconId;
+                selectedSlot = hoveredSlotIndex;
+                selectionMade = true;
+                showFeedback(`${itemName} → Slotti ${hoveredSlotIndex + 1}`);
+
+                // Clear hover states
+                document.querySelectorAll('.use-slot').forEach(s => s.classList.remove('drag-hover'));
+                hoveredSlotIndex = null;
+
+                // Update button states
+                if (e.button === 0) lmbDown = false;
+                if (e.button === 2) rmbDown = false;
+
+                updateUseSlots();
+
+                if (!lmbDown && !rmbDown) {
+                    resetState();
+                }
+                return;
+            }
+
+            // Otherwise use original logic
+            originalHandleMouseUp.call(this, e);
+        };
+
+        // Re-register the updated handler
+        document.removeEventListener('mouseup', originalHandleMouseUp);
+        document.addEventListener('mouseup', handleMouseUp);
+
+        // Keyboard handling
+        document.addEventListener('keydown', e => {
+            // Number keys 1-4 for slot selection
+            if (e.key >= '1' && e.key <= '4') {
+                selectedSlot = parseInt(e.key) - 1;
+                updateUseSlots();
+            }
+
+            // Shift for modifier
+            if (e.key === 'Shift' && !modifierActive) {
+                modifierActive = true;
+                document.getElementById('modifier-indicator').textContent = 'SHIFT';
+                document.getElementById('modifier-indicator').classList.add('visible');
+                if (activeElement) updateVisuals(activeElement);
+            }
+
+            // Tab for page switch
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                pageSwitch = !pageSwitch;
+                document.getElementById('modifier-indicator').textContent = 'TAB (sivunvaihto)';
+                document.getElementById('modifier-indicator').classList.toggle('visible', pageSwitch);
+                if (activeElement) updateVisuals(activeElement);
+            }
+        });
+
+        document.addEventListener('keyup', e => {
+            if (e.key === 'Shift') {
+                modifierActive = false;
+                if (!pageSwitch) {
+                    document.getElementById('modifier-indicator').classList.remove('visible');
+                }
+                if (activeElement) updateVisuals(activeElement);
+            }
+        });
+
+        // Prevent context menu globally
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Initialize
+        function init() {
+            // Create inventory items
+            for (const [category, items] of Object.entries(inventoryData)) {
+                const container = document.getElementById(category);
+                items.forEach((item, index) => {
+                    container.appendChild(createStenocon(item, index));
+                });
+            }
+
+            // Create use slots
+            updateUseSlots();
+        }
+
+        init();
+    </script>
+</body>
+</html>
