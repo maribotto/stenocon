@@ -22,7 +22,7 @@ Stenocon displays two icons (L and R) side by side. By combining mouse button pr
 
 ## Demo
 
-**[Live Demo](https://your-github-username.github.io/stenocon/demo.html)** - Interactive RPG inventory example
+**[Live Demo](https://maribotto.github.io/stenocon/demo.html)** - Interactive RPG inventory example
 
 ![Demo Screenshot](diagram.svg)
 
