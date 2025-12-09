@@ -225,10 +225,7 @@
         }
 
         /* Position: LR far left, L left, R right, RL far right */
-        .floating-item.pos-LR {
-            right: calc(100% + 70px);
-        }
-
+        /* L and R are fixed next to the book icon */
         .floating-item.pos-L {
             right: calc(100% + 4px);
         }
@@ -237,9 +234,7 @@
             left: calc(100% + 4px);
         }
 
-        .floating-item.pos-RL {
-            left: calc(100% + 70px);
-        }
+        /* LR and RL positions are set dynamically by JS based on L/R width */
 
         /* Color highlights when item is being selected */
         .floating-item.highlighted.type-L {
@@ -1017,6 +1012,32 @@
         // Prevent context menu globally
         document.addEventListener('contextmenu', e => e.preventDefault());
 
+        // Position outer floating items (LR/RL) based on inner items (L/R) width
+        function positionFloatingItems() {
+            document.querySelectorAll('.stenocon').forEach(stenocon => {
+                const itemL = stenocon.querySelector('.floating-item.pos-L');
+                const itemR = stenocon.querySelector('.floating-item.pos-R');
+                const itemLR = stenocon.querySelector('.floating-item.pos-LR');
+                const itemRL = stenocon.querySelector('.floating-item.pos-RL');
+
+                // Temporarily show items to measure
+                itemL.style.opacity = '1';
+                itemR.style.opacity = '1';
+
+                const lWidth = itemL.offsetWidth;
+                const rWidth = itemR.offsetWidth;
+
+                // Reset opacity
+                itemL.style.opacity = '';
+                itemR.style.opacity = '';
+
+                // Position LR to the left of L (with 4px gap)
+                itemLR.style.right = `calc(100% + ${lWidth + 8}px)`;
+                // Position RL to the right of R (with 4px gap)
+                itemRL.style.left = `calc(100% + ${rWidth + 8}px)`;
+            });
+        }
+
         // Initialize
         function init() {
             // Create inventory items
@@ -1029,6 +1050,9 @@
 
             // Create use slots
             updateUseSlots();
+
+            // Position floating items after DOM is ready
+            requestAnimationFrame(positionFloatingItems);
         }
 
         init();
