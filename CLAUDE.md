@@ -48,3 +48,7 @@ Open `demo.html` in a browser to test the stenocon interaction. For `index.html`
 python -m http.server 8000
 # Then open http://localhost:8000/
 ```
+
+## License
+
+ISC

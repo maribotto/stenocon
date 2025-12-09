@@ -91,4 +91,4 @@ See [PSEUDO.md](PSEUDO.md) for detailed pseudocode.
 
 ## License
 
-MIT
+ISC
