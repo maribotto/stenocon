@@ -61,7 +61,6 @@ When you press a mouse button on a stenocon icon:
 | `index.html` | Documentation with videos and pseudocode |
 | `diagram.svg` | Concept diagram |
 | `PSEUDO.md` | Selection logic pseudocode |
-| `KONSEPTI.md` | Original concept (Finnish) |
 
 ## Video Demonstrations
 

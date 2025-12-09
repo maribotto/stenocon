@@ -30,7 +30,6 @@ Stenocon is a UI input concept where a single icon contains two sub-icons (L and
 ## Project Files
 
 ### Documentation
-- `KONSEPTI.md` - Core concept documentation (Finnish)
 - `PSEUDO.md` - Selection logic pseudocode (English)
 - `diagram.svg` - Concept diagram (English)
 
