@@ -31,7 +31,6 @@ Stenocon is a UI input concept where a single icon contains two sub-icons (L and
 
 ### Documentation
 - `KONSEPTI.md` - Core concept documentation (Finnish)
-- `ESIMERKKI.md` - Example usage in RPG inventory context (Finnish)
 - `PSEUDO.md` - Selection logic pseudocode (English)
 - `diagram.svg` - Concept diagram (English)
 

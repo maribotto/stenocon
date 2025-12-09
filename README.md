@@ -62,7 +62,6 @@ When you press a mouse button on a stenocon icon:
 | `diagram.svg` | Concept diagram |
 | `PSEUDO.md` | Selection logic pseudocode |
 | `KONSEPTI.md` | Original concept (Finnish) |
-| `ESIMERKKI.md` | RPG inventory example (Finnish) |
 
 ## Video Demonstrations
 
