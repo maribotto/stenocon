@@ -67,7 +67,7 @@ When you press a mouse button on a stenocon icon:
 ## Video Demonstrations
 
 - [Demo Video 1](https://youtu.be/9v0Tn9rg1wI)
-- [Demo Video 2](https://youtu.be/3PMcCJ5e280)
+- [Demo Video 2](https://www.youtube.com/shorts/8Ef4r-9OiK4)
 
 ## Use Cases
 
