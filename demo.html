@@ -1,51 +1,51 @@
 <!DOCTYPE html>
-<html lang="fi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stenocon Demo - RPG Inventaario</title>
+    <title>Stenocon Demo - RPG Inventory</title>
     <!-- SVG Icon definitions -->
     <svg style="display: none;">
         <defs>
-            <!-- Lähitaisteluaseet -->
-            <symbol id="icon-miekka" viewBox="0 0 24 24">
+            <!-- Melee weapons -->
+            <symbol id="icon-sword" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M6.92 5L5 7l6 6-3.5 3.5 1.42 1.42L12.5 14l1.5 1.5-1.42 1.42 1.42 1.42L17.5 15l-1.5-1.5L22 7.5V2h-5.5L10 8.5 6.92 5zM19 6.5L14.5 11l-1-1L18 5.5l1 1z"/>
             </symbol>
-            <symbol id="icon-kirves" viewBox="0 0 24 24">
+            <symbol id="icon-axe" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M12 2L8 6v2H6v2l-4 4 2 2 4-4h2v-2l2-2v8l-2 2v4h4v-4l-2-2V8l6-6h-6z"/>
             </symbol>
-            <symbol id="icon-keihas" viewBox="0 0 24 24">
+            <symbol id="icon-spear" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M18.36 2.64L12 9l-1.41-1.41-2.83 2.83L9.17 12l-6.34 6.34 1.41 1.41L10.59 13l1.41 1.41 2.83-2.83L13.41 10l6.95-6.95-1-1zM5 3L2 6l3 3 3-3-3-3z"/>
             </symbol>
-            <symbol id="icon-vasara" viewBox="0 0 24 24">
+            <symbol id="icon-hammer" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M2 19.63L13.43 8.2l-1.41-1.41 2.82-2.83 4.24 4.24-2.82 2.83-1.42-1.42L3.41 21 2 19.63zM18.36 8.46l1.41-1.41-4.24-4.24-1.41 1.41 4.24 4.24z"/>
             </symbol>
 
-            <!-- Etäaseet -->
-            <symbol id="icon-jousi" viewBox="0 0 24 24">
+            <!-- Ranged weapons -->
+            <symbol id="icon-bow" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M12 2C9.5 2 7.25 3.5 6.28 5.72L4 5l1 3-3 1 .72 2.28C.5 12.25 2 14.5 2 17c0 2.76 2.24 5 5 5 2.5 0 4.75-1.5 5.72-3.72L15 19l-1-3 3-1-.72-2.28C18.5 11.75 22 9.5 22 7c0-2.76-2.24-5-5-5-2.5 0-4.75 1.5-5.72 3.72L9 5l1 3-3 1 .72 2.28z"/>
             </symbol>
-            <symbol id="icon-heittotahti" viewBox="0 0 24 24">
+            <symbol id="icon-shuriken" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M12 1l2.5 7.5H22l-6 4.5 2.5 7.5L12 16l-6.5 4.5L8 13 2 8.5h7.5L12 1z"/>
             </symbol>
-            <symbol id="icon-heittotikari" viewBox="0 0 24 24">
+            <symbol id="icon-throwing-knife" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M5.12 14.12L12 7.24l4.76 4.76-6.88 6.88-4.76-4.76zM14 3l-1 1 3 3 1-1-3-3zM3 21l6-2-4-4-2 6z"/>
             </symbol>
-            <symbol id="icon-linko" viewBox="0 0 24 24">
+            <symbol id="icon-sling" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M12 2C8.5 2 5.5 4.5 5 8H3l3 4 3-4H7c.5-2.5 2.5-4 5-4s4.5 1.5 5 4h-2l3 4 3-4h-2c-.5-3.5-3.5-6-7-6zM7 15v7h2v-5h6v5h2v-7H7z"/>
             </symbol>
 
-            <!-- Loitsut -->
-            <symbol id="icon-tulipallo" viewBox="0 0 24 24">
+            <!-- Spells -->
+            <symbol id="icon-fireball" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M12 23c-3.9 0-7-3.1-7-7 0-2.5 1.5-4.5 3-6.5s3-4.2 3-6.5c0 0 1 2.5 2 4 .5.8 1 1.5 1.5 2.5.5-1 1-2 1.5-2.5 1.5-1.5 2-3 2-4 0 2.3 1.5 4.5 3 6.5s3 4 3 6.5c0 3.9-3.1 7-7 7z"/>
             </symbol>
-            <symbol id="icon-jaavasama" viewBox="0 0 24 24">
+            <symbol id="icon-ice-bolt" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M19 3L5 17l4 4L23 7l-4-4zM5.5 21.5L2 22l.5-3.5L5.5 21.5zM14 6l4 4-8.5 8.5-4-4L14 6z"/>
             </symbol>
-            <symbol id="icon-salama" viewBox="0 0 24 24">
+            <symbol id="icon-lightning" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M11 2L6 13h4l-1 9 8-12h-5l3-8z"/>
             </symbol>
-            <symbol id="icon-kuolemansade" viewBox="0 0 24 24">
+            <symbol id="icon-death-ray" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M12 2C9.24 2 7 4.24 7 7c0 1.8 1 3.4 2.5 4.2V13H8v2h1.5v1H8v2h1.5v4h5v-4H16v-2h-1.5v-1H16v-2h-1.5v-1.8c1.5-.8 2.5-2.4 2.5-4.2 0-2.76-2.24-5-5-5zm-1 5.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5z"/>
             </symbol>
         </defs>
@@ -392,29 +392,29 @@
     <div class="container">
         <h1>Stenocon Demo</h1>
         <p class="instructions">
-            LMB = L (sininen) | RMB = R (punainen) | LMB+RMB = LR (vihreä) | RMB+LMB = RL (keltainen)<br>
-            Numerot 1-4 valitsevat käyttöslotin | Shift = modifier | Tab = sivunvaihto
+            LMB = L (blue) | RMB = R (red) | LMB+RMB = LR (green) | RMB+LMB = RL (yellow)<br>
+            Keys 1-4 select use slot | Shift = modifier | Tab = page switch
         </p>
 
         <div class="inventory">
-            <h2>Inventaario</h2>
+            <h2>Inventory</h2>
 
             <div class="category">
-                <h3>Lähitaisteluaseet</h3>
+                <h3>Melee Weapons</h3>
                 <div class="stenocon-grid" id="melee">
                     <!-- Generated by JS -->
                 </div>
             </div>
 
             <div class="category">
-                <h3>Etäaseet</h3>
+                <h3>Ranged Weapons</h3>
                 <div class="stenocon-grid" id="ranged">
                     <!-- Generated by JS -->
                 </div>
             </div>
 
             <div class="category">
-                <h3>Loitsut</h3>
+                <h3>Spells</h3>
                 <div class="stenocon-grid" id="spells">
                     <!-- Generated by JS -->
                 </div>
@@ -422,22 +422,22 @@
         </div>
 
         <div class="use-slots">
-            <h2>Käyttöslotit</h2>
+            <h2>Use Slots</h2>
             <div class="slots-container" id="use-slots">
                 <!-- Generated by JS -->
             </div>
         </div>
 
         <div class="legend">
-            <h2>Värikoodit</h2>
+            <h2>Color Codes</h2>
             <div class="legend-grid">
                 <div class="legend-item">
                     <div class="legend-color blue"></div>
-                    <span>L = LMB klikkaus</span>
+                    <span>L = LMB click</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color red"></div>
-                    <span>R = RMB klikkaus</span>
+                    <span>R = RMB click</span>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color green"></div>
@@ -455,24 +455,24 @@
     <div class="modifier-indicator" id="modifier-indicator">SHIFT</div>
 
     <script>
-        // Inventory data from ESIMERKKI.md
+        // Inventory data
         const inventoryData = {
             melee: [
                 {
-                    L: 'Miekka', R: 'Kirves', LR: 'Keihäs', RL: 'Vasara',
-                    iconL: 'miekka', iconR: 'kirves', iconLR: 'keihas', iconRL: 'vasara'
+                    L: 'Sword', R: 'Axe', LR: 'Spear', RL: 'Hammer',
+                    iconL: 'sword', iconR: 'axe', iconLR: 'spear', iconRL: 'hammer'
                 }
             ],
             ranged: [
                 {
-                    L: 'Jousi', R: 'Heittotähti', LR: 'Heittotikari', RL: 'Linko',
-                    iconL: 'jousi', iconR: 'heittotahti', iconLR: 'heittotikari', iconRL: 'linko'
+                    L: 'Bow', R: 'Shuriken', LR: 'Throwing Knife', RL: 'Sling',
+                    iconL: 'bow', iconR: 'shuriken', iconLR: 'throwing-knife', iconRL: 'sling'
                 }
             ],
             spells: [
                 {
-                    L: 'Tulipallo', R: 'Jäävasama', LR: 'Salama', RL: 'Kuolemansäde',
-                    iconL: 'tulipallo', iconR: 'jaavasama', iconLR: 'salama', iconRL: 'kuolemansade'
+                    L: 'Fireball', R: 'Ice Bolt', LR: 'Lightning', RL: 'Death Ray',
+                    iconL: 'fireball', iconR: 'ice-bolt', iconLR: 'lightning', iconRL: 'death-ray'
                 }
             ]
         };
@@ -714,13 +714,6 @@
             rightCombo.classList.remove('visible', 'highlighted');
         }
 
-        // Map item names to icon IDs
-        const itemIconMap = {
-            'Miekka': 'miekka', 'Kirves': 'kirves', 'Keihäs': 'keihas', 'Vasara': 'vasara',
-            'Jousi': 'jousi', 'Heittotähti': 'heittotahti', 'Heittotikari': 'heittotikari', 'Linko': 'linko',
-            'Tulipallo': 'tulipallo', 'Jäävasama': 'jaavasama', 'Salama': 'salama', 'Kuolemansäde': 'kuolemansade'
-        };
-
         // Store both name and icon for use slots
         const useSlotIcons = ['', '', '', ''];
 
@@ -731,7 +724,7 @@
             useSlots[selectedSlot] = itemName;
             useSlotIcons[selectedSlot] = iconId;
             updateUseSlots();
-            showFeedback(`${itemName} → Slotti ${selectedSlot + 1}`);
+            showFeedback(`${itemName} → Slot ${selectedSlot + 1}`);
         }
 
         function showFeedback(message) {
@@ -757,7 +750,7 @@
                         <div class="slot-content">${useSlots[i]}</div>
                     `;
                 } else {
-                    contentHtml = `<div class="slot-content empty">Tyhjä</div>`;
+                    contentHtml = `<div class="slot-content empty">Empty</div>`;
                 }
 
                 slot.innerHTML = `
@@ -813,7 +806,7 @@
                 useSlotIcons[hoveredSlotIndex] = iconId;
                 selectedSlot = hoveredSlotIndex;
                 selectionMade = true;
-                showFeedback(`${itemName} → Slotti ${hoveredSlotIndex + 1}`);
+                showFeedback(`${itemName} → Slot ${hoveredSlotIndex + 1}`);
 
                 // Clear hover states
                 document.querySelectorAll('.use-slot').forEach(s => s.classList.remove('drag-hover'));
@@ -859,7 +852,7 @@
             if (e.key === 'Tab') {
                 e.preventDefault();
                 pageSwitch = !pageSwitch;
-                document.getElementById('modifier-indicator').textContent = 'TAB (sivunvaihto)';
+                document.getElementById('modifier-indicator').textContent = 'TAB (page switch)';
                 document.getElementById('modifier-indicator').classList.toggle('visible', pageSwitch);
                 if (activeElement) updateVisuals(activeElement);
             }
