@@ -24,6 +24,8 @@ Stenocon displays two icons (L and R) side by side. By combining mouse button pr
 
 **[Live Demo](https://maribotto.github.io/stenocon/demo.html)** - Interactive RPG inventory example
 
+**[Documentation](https://maribotto.github.io/stenocon/index.html)** - Explanation with videos and pseudocode
+
 ![Demo Screenshot](diagram.svg)
 
 ### Try It Locally
