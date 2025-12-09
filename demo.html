@@ -489,6 +489,7 @@
         let rmbDown = false;
         let firstButton = null; // 'lmb' or 'rmb'
         let selectionMade = false; // Prevents multiple selections until full reset
+        let cancelled = false; // Selection was cancelled, wait for full reset
         let pendingSelection = null; // Current selection type being previewed
         let pendingItemName = null; // Item name for drag
 
@@ -508,22 +509,30 @@
             el.innerHTML = `
                 <div class="stenocon-half left">
                     <div class="combo-item">
-                        <svg class="item-icon"><use href="#icon-${data.iconLR}"/></svg>
-                        <span class="item-label">${data.LR}</span>
+                        <svg class="item-icon icon-normal"><use href="#icon-${data.iconLR}"/></svg>
+                        <span class="item-label label-normal">${data.LR}</span>
+                        <svg class="item-icon icon-swapped" style="display:none"><use href="#icon-${data.iconL}"/></svg>
+                        <span class="item-label label-swapped" style="display:none">${data.L}</span>
                     </div>
                     <div class="primary-item">
-                        <svg class="item-icon"><use href="#icon-${data.iconL}"/></svg>
-                        <span class="item-label">${data.L}</span>
+                        <svg class="item-icon icon-normal"><use href="#icon-${data.iconL}"/></svg>
+                        <span class="item-label label-normal">${data.L}</span>
+                        <svg class="item-icon icon-swapped" style="display:none"><use href="#icon-${data.iconLR}"/></svg>
+                        <span class="item-label label-swapped" style="display:none">${data.LR}</span>
                     </div>
                 </div>
                 <div class="stenocon-half right">
                     <div class="combo-item">
-                        <svg class="item-icon"><use href="#icon-${data.iconRL}"/></svg>
-                        <span class="item-label">${data.RL}</span>
+                        <svg class="item-icon icon-normal"><use href="#icon-${data.iconRL}"/></svg>
+                        <span class="item-label label-normal">${data.RL}</span>
+                        <svg class="item-icon icon-swapped" style="display:none"><use href="#icon-${data.iconR}"/></svg>
+                        <span class="item-label label-swapped" style="display:none">${data.R}</span>
                     </div>
                     <div class="primary-item">
-                        <svg class="item-icon"><use href="#icon-${data.iconR}"/></svg>
-                        <span class="item-label">${data.R}</span>
+                        <svg class="item-icon icon-normal"><use href="#icon-${data.iconR}"/></svg>
+                        <span class="item-label label-normal">${data.R}</span>
+                        <svg class="item-icon icon-swapped" style="display:none"><use href="#icon-${data.iconRL}"/></svg>
+                        <span class="item-label label-swapped" style="display:none">${data.RL}</span>
                     </div>
                 </div>
             `;
@@ -540,8 +549,8 @@
         function handleMouseDown(e) {
             e.preventDefault();
 
-            // If a selection was already made, require full release before new interaction
-            if (selectionMade) return;
+            // If a selection was already made or cancelled, require full release before new interaction
+            if (selectionMade || cancelled) return;
 
             const stenocon = e.currentTarget;
             activeElement = stenocon;
@@ -583,8 +592,11 @@
                     const selection = swapped ? 'LR' : 'L';
                     makeSelection(stenocon, selection);
                     selectionMade = true;
+                } else if (lmbDown && rmbDown && firstButton === 'lmb') {
+                    // LMB was first but LMB released = cancel (wrong order)
+                    cancelled = true;
+                    resetVisuals(stenocon);
                 }
-                // If LMB released but RMB was first and still down = cancel (wrong order)
                 lmbDown = false;
             } else if (e.button === 2) { // RMB released
                 if (lmbDown && rmbDown && firstButton === 'lmb') {
@@ -597,8 +609,11 @@
                     const selection = swapped ? 'RL' : 'R';
                     makeSelection(stenocon, selection);
                     selectionMade = true;
+                } else if (lmbDown && rmbDown && firstButton === 'rmb') {
+                    // RMB was first but RMB released = cancel (wrong order)
+                    cancelled = true;
+                    resetVisuals(stenocon);
                 }
-                // If RMB released but LMB was first and still down = cancel (wrong order)
                 rmbDown = false;
             }
 
@@ -627,6 +642,7 @@
             rmbDown = false;
             firstButton = null;
             selectionMade = false;
+            cancelled = false;
             pendingSelection = null;
             pendingItemName = null;
         }
@@ -645,7 +661,7 @@
             leftCombo.classList.remove('visible', 'highlighted');
             rightCombo.classList.remove('visible', 'highlighted');
 
-            if (selectionMade) return; // Don't update visuals after selection
+            if (selectionMade || cancelled) return; // Don't update visuals after selection or cancel
 
             const swapped = modifierActive || pageSwitch;
 
@@ -712,6 +728,18 @@
             rightHalf.classList.remove('active');
             leftCombo.classList.remove('visible', 'highlighted');
             rightCombo.classList.remove('visible', 'highlighted');
+        }
+
+        function updateSwapVisuals() {
+            const swapped = modifierActive || pageSwitch;
+            document.querySelectorAll('.stenocon').forEach(stenocon => {
+                stenocon.querySelectorAll('.icon-normal, .label-normal').forEach(el => {
+                    el.style.display = swapped ? 'none' : '';
+                });
+                stenocon.querySelectorAll('.icon-swapped, .label-swapped').forEach(el => {
+                    el.style.display = swapped ? '' : 'none';
+                });
+            });
         }
 
         // Store both name and icon for use slots
@@ -845,6 +873,7 @@
                 modifierActive = true;
                 document.getElementById('modifier-indicator').textContent = 'SHIFT';
                 document.getElementById('modifier-indicator').classList.add('visible');
+                updateSwapVisuals();
                 if (activeElement) updateVisuals(activeElement);
             }
 
@@ -854,6 +883,7 @@
                 pageSwitch = !pageSwitch;
                 document.getElementById('modifier-indicator').textContent = 'TAB (page switch)';
                 document.getElementById('modifier-indicator').classList.toggle('visible', pageSwitch);
+                updateSwapVisuals();
                 if (activeElement) updateVisuals(activeElement);
             }
         });
@@ -864,6 +894,7 @@
                 if (!pageSwitch) {
                     document.getElementById('modifier-indicator').classList.remove('visible');
                 }
+                updateSwapVisuals();
                 if (activeElement) updateVisuals(activeElement);
             }
         });
