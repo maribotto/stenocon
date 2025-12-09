@@ -40,8 +40,7 @@ Stenocon is a UI input concept where a single icon contains two sub-icons (L and
 - `index.html` - Documentation page with diagram, videos, and pseudocode
 
 ### Assets
-- `stenocon.png` - Concept sketch
-- `grafiikka.png` - Original graphic (Finnish)
+- `grafiikka.png` - Original concept graphic (Finnish)
 
 ## Development
 

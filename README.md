@@ -2,8 +2,6 @@
 
 A UI input concept that enables **4 selections from a single icon pair** using only left and right mouse buttons.
 
-![Stenocon Concept](stenocon.png)
-
 ## The Concept
 
 Stenocon displays two icons (L and R) side by side. By combining mouse button press sequences, users can select from 4 different options without moving the cursor:
