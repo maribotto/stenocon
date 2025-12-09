@@ -386,6 +386,44 @@
         .modifier-indicator.visible {
             opacity: 1;
         }
+
+        /* Drag cursor */
+        .drag-cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+            background: #1a1a2e;
+            border: 2px solid #e94560;
+            border-radius: 8px;
+            padding: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transform: translate(-50%, -50%);
+        }
+
+        .drag-cursor.visible {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .drag-cursor .drag-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        .drag-cursor .drag-label {
+            font-size: 11px;
+            font-weight: bold;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        .drag-cursor.type-L { border-color: #3498db; }
+        .drag-cursor.type-R { border-color: #e74c3c; }
+        .drag-cursor.type-LR { border-color: #2ecc71; }
+        .drag-cursor.type-RL { border-color: #f1c40f; }
     </style>
 </head>
 <body>
@@ -453,6 +491,10 @@
 
     <div class="feedback" id="feedback"></div>
     <div class="modifier-indicator" id="modifier-indicator">SHIFT</div>
+    <div class="drag-cursor" id="drag-cursor">
+        <svg class="drag-icon"><use href="#icon-sword"/></svg>
+        <span class="drag-label">Item</span>
+    </div>
 
     <script>
         // Inventory data
@@ -799,8 +841,34 @@
         // Track which slot is being hovered for drag & drop
         let hoveredSlotIndex = null;
 
+        const dragCursor = document.getElementById('drag-cursor');
+
+        function updateDragCursor(e) {
+            if (!activeElement || selectionMade || cancelled || !pendingSelection) {
+                dragCursor.classList.remove('visible', 'type-L', 'type-R', 'type-LR', 'type-RL');
+                return;
+            }
+
+            // Update position
+            dragCursor.style.left = e.clientX + 'px';
+            dragCursor.style.top = e.clientY + 'px';
+
+            // Update icon and label
+            const iconId = activeElement.dataset['icon' + pendingSelection];
+            const itemName = activeElement.dataset[pendingSelection];
+            dragCursor.querySelector('.drag-icon use').setAttribute('href', '#icon-' + iconId);
+            dragCursor.querySelector('.drag-label').textContent = itemName;
+
+            // Update color based on selection type
+            dragCursor.classList.remove('type-L', 'type-R', 'type-LR', 'type-RL');
+            dragCursor.classList.add('type-' + pendingSelection);
+            dragCursor.classList.add('visible');
+        }
+
         document.addEventListener('mousemove', e => {
-            if (!activeElement || selectionMade || !pendingSelection) {
+            updateDragCursor(e);
+
+            if (!activeElement || selectionMade || cancelled || !pendingSelection) {
                 // Clear all hover states when not dragging
                 document.querySelectorAll('.use-slot').forEach(s => s.classList.remove('drag-hover'));
                 hoveredSlotIndex = null;
