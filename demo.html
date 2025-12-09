@@ -110,14 +110,16 @@
 
         .stenocon-grid {
             display: flex;
-            gap: 15px;
+            gap: 100px;
             flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px 60px;
         }
 
-        /* Stenocon icon pair */
+        /* Stenocon - book/page style icon like diagram.svg */
         .stenocon {
             position: relative;
-            width: 120px;
+            width: 50px;
             height: 60px;
             background: #0f3460;
             border-radius: 8px;
@@ -131,6 +133,7 @@
             transform: scale(1.05);
         }
 
+        /* The two halves inside the book icon */
         .stenocon-half {
             flex: 1;
             display: flex;
@@ -140,37 +143,47 @@
             font-size: 10px;
             font-weight: bold;
             transition: all 0.15s;
-            padding: 4px;
+            padding: 2px;
             text-align: center;
-            gap: 2px;
             position: relative;
         }
 
-        .item-icon {
-            width: 24px;
-            height: 24px;
-            flex-shrink: 0;
+        .stenocon-half.left {
+            background: rgba(52, 152, 219, 0.3);
+            border-right: 1px solid #0a2540;
+            border-radius: 8px 0 0 8px;
         }
 
-        .item-label {
-            font-size: 9px;
-            line-height: 1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
+        .stenocon-half.right {
+            background: rgba(231, 76, 60, 0.3);
+            border-radius: 0 8px 8px 0;
         }
 
-        /* Primary item (L/R) */
-        .stenocon-half .primary-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
+        /* Label inside the book halves */
+        .stenocon-half .half-label {
+            font-size: 14px;
+            font-weight: bold;
         }
 
-        /* Combo item (LR/RL) - floating popup, hidden by default */
-        .stenocon-half .combo-item {
+        .stenocon-half.left .half-label {
+            color: #3498db;
+        }
+
+        .stenocon-half.right .half-label {
+            color: #e74c3c;
+        }
+
+        /* Highlight when active */
+        .stenocon-half.left.active {
+            background: rgba(52, 152, 219, 0.6);
+        }
+
+        .stenocon-half.right.active {
+            background: rgba(231, 76, 60, 0.6);
+        }
+
+        /* Floating popup items - all four selections float outside */
+        .floating-item {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -189,59 +202,62 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
-        /* Left combo floats to the left */
-        .stenocon-half.left .combo-item {
-            right: 100%;
-            margin-right: 8px;
+        .floating-item .item-icon {
+            width: 24px;
+            height: 24px;
+            flex-shrink: 0;
         }
 
-        /* Right combo floats to the right */
-        .stenocon-half.right .combo-item {
-            left: 100%;
-            margin-left: 8px;
+        .floating-item .item-label {
+            font-size: 9px;
+            line-height: 1;
+            white-space: nowrap;
         }
 
-        .stenocon-half .combo-item.visible {
+        .floating-item.visible {
             opacity: 1;
         }
 
-        /* Combo item highlighted when it will be selected */
-        .stenocon-half.left .combo-item.highlighted {
+        /* Position: LR far left, L left, R right, RL far right */
+        .floating-item.pos-LR {
+            right: calc(100% + 50px);
+        }
+
+        .floating-item.pos-L {
+            right: calc(100% + 4px);
+        }
+
+        .floating-item.pos-R {
+            left: calc(100% + 4px);
+        }
+
+        .floating-item.pos-RL {
+            left: calc(100% + 50px);
+        }
+
+        /* Color highlights when item is being selected */
+        .floating-item.highlighted.type-L {
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+        }
+
+        .floating-item.highlighted.type-R {
+            border-color: #e74c3c;
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .floating-item.highlighted.type-LR {
             border-color: #2ecc71;
             background: rgba(46, 204, 113, 0.2);
             color: #2ecc71;
         }
 
-        .stenocon-half.right .combo-item.highlighted {
+        .floating-item.highlighted.type-RL {
             border-color: #f1c40f;
             background: rgba(241, 196, 15, 0.2);
             color: #f1c40f;
-        }
-
-        .stenocon-half.left {
-            background: rgba(52, 152, 219, 0.3);
-            border-right: 1px solid #0a2540;
-        }
-
-        .stenocon-half.right {
-            background: rgba(231, 76, 60, 0.3);
-        }
-
-        /* Highlight colors for primary when active */
-        .stenocon-half.left.active {
-            background: rgba(52, 152, 219, 0.5);
-        }
-
-        .stenocon-half.left.active .primary-item {
-            color: #3498db;
-        }
-
-        .stenocon-half.right.active {
-            background: rgba(231, 76, 60, 0.5);
-        }
-
-        .stenocon-half.right.active .primary-item {
-            color: #e74c3c;
         }
 
         /* Use slots */
@@ -549,33 +565,29 @@
             el.dataset.iconLR = data.iconLR;
             el.dataset.iconRL = data.iconRL;
             el.innerHTML = `
+                <!-- Floating items outside the book icon -->
+                <div class="floating-item pos-LR type-LR" data-type="LR">
+                    <svg class="item-icon"><use href="#icon-${data.iconLR}"/></svg>
+                    <span class="item-label">${data.LR}</span>
+                </div>
+                <div class="floating-item pos-L type-L" data-type="L">
+                    <svg class="item-icon"><use href="#icon-${data.iconL}"/></svg>
+                    <span class="item-label">${data.L}</span>
+                </div>
+                <div class="floating-item pos-R type-R" data-type="R">
+                    <svg class="item-icon"><use href="#icon-${data.iconR}"/></svg>
+                    <span class="item-label">${data.R}</span>
+                </div>
+                <div class="floating-item pos-RL type-RL" data-type="RL">
+                    <svg class="item-icon"><use href="#icon-${data.iconRL}"/></svg>
+                    <span class="item-label">${data.RL}</span>
+                </div>
+                <!-- Book icon with L|R labels -->
                 <div class="stenocon-half left">
-                    <div class="combo-item">
-                        <svg class="item-icon icon-normal"><use href="#icon-${data.iconLR}"/></svg>
-                        <span class="item-label label-normal">${data.LR}</span>
-                        <svg class="item-icon icon-swapped" style="display:none"><use href="#icon-${data.iconL}"/></svg>
-                        <span class="item-label label-swapped" style="display:none">${data.L}</span>
-                    </div>
-                    <div class="primary-item">
-                        <svg class="item-icon icon-normal"><use href="#icon-${data.iconL}"/></svg>
-                        <span class="item-label label-normal">${data.L}</span>
-                        <svg class="item-icon icon-swapped" style="display:none"><use href="#icon-${data.iconLR}"/></svg>
-                        <span class="item-label label-swapped" style="display:none">${data.LR}</span>
-                    </div>
+                    <span class="half-label">L</span>
                 </div>
                 <div class="stenocon-half right">
-                    <div class="combo-item">
-                        <svg class="item-icon icon-normal"><use href="#icon-${data.iconRL}"/></svg>
-                        <span class="item-label label-normal">${data.RL}</span>
-                        <svg class="item-icon icon-swapped" style="display:none"><use href="#icon-${data.iconR}"/></svg>
-                        <span class="item-label label-swapped" style="display:none">${data.R}</span>
-                    </div>
-                    <div class="primary-item">
-                        <svg class="item-icon icon-normal"><use href="#icon-${data.iconR}"/></svg>
-                        <span class="item-label label-normal">${data.R}</span>
-                        <svg class="item-icon icon-swapped" style="display:none"><use href="#icon-${data.iconRL}"/></svg>
-                        <span class="item-label label-swapped" style="display:none">${data.RL}</span>
-                    </div>
+                    <span class="half-label">R</span>
                 </div>
             `;
 
@@ -695,56 +707,75 @@
 
             const leftHalf = stenocon.querySelector('.stenocon-half.left');
             const rightHalf = stenocon.querySelector('.stenocon-half.right');
-            const leftCombo = leftHalf.querySelector('.combo-item');
-            const rightCombo = rightHalf.querySelector('.combo-item');
+            const floatingItems = stenocon.querySelectorAll('.floating-item');
 
-            // Reset
+            // Reset all
             leftHalf.classList.remove('active');
             rightHalf.classList.remove('active');
-            leftCombo.classList.remove('visible', 'highlighted');
-            rightCombo.classList.remove('visible', 'highlighted');
+            floatingItems.forEach(item => item.classList.remove('visible', 'highlighted'));
 
             if (selectionMade || cancelled) return; // Don't update visuals after selection or cancel
 
             const swapped = modifierActive || pageSwitch;
+
+            // Helper to show floating item
+            const showItem = (type, highlighted) => {
+                const item = stenocon.querySelector(`.floating-item.type-${type}`);
+                if (item) {
+                    item.classList.add('visible');
+                    if (highlighted) item.classList.add('highlighted');
+                }
+            };
 
             if (lmbDown && rmbDown) {
                 // Both pressed - show combo highlighted based on first button
                 if (firstButton === 'lmb') {
                     // LMB first, RMB second = will be LR when RMB released
                     leftHalf.classList.add('active');
-                    leftCombo.classList.add('visible', 'highlighted');
                     if (swapped) {
+                        showItem('L', true);
+                        showItem('LR', false);
                         pendingSelection = 'L';
                     } else {
+                        showItem('L', false);
+                        showItem('LR', true);
                         pendingSelection = 'LR';
                     }
                 } else {
                     // RMB first, LMB second = will be RL when LMB released
                     rightHalf.classList.add('active');
-                    rightCombo.classList.add('visible', 'highlighted');
                     if (swapped) {
+                        showItem('R', true);
+                        showItem('RL', false);
                         pendingSelection = 'R';
                     } else {
+                        showItem('R', false);
+                        showItem('RL', true);
                         pendingSelection = 'RL';
                     }
                 }
             } else if (lmbDown) {
-                // LMB down - show L active, and LR combo floating beside it (no highlight yet)
+                // LMB down - show L and LR, highlight pending
                 leftHalf.classList.add('active');
-                leftCombo.classList.add('visible');
                 if (swapped) {
+                    showItem('L', false);
+                    showItem('LR', true);
                     pendingSelection = 'LR';
                 } else {
+                    showItem('L', true);
+                    showItem('LR', false);
                     pendingSelection = 'L';
                 }
             } else if (rmbDown) {
-                // RMB down - show R active, and RL combo floating beside it (no highlight yet)
+                // RMB down - show R and RL, highlight pending
                 rightHalf.classList.add('active');
-                rightCombo.classList.add('visible');
                 if (swapped) {
+                    showItem('R', false);
+                    showItem('RL', true);
                     pendingSelection = 'RL';
                 } else {
+                    showItem('R', true);
+                    showItem('RL', false);
                     pendingSelection = 'R';
                 }
             } else {
@@ -764,25 +795,16 @@
 
             const leftHalf = stenocon.querySelector('.stenocon-half.left');
             const rightHalf = stenocon.querySelector('.stenocon-half.right');
-            const leftCombo = leftHalf.querySelector('.combo-item');
-            const rightCombo = rightHalf.querySelector('.combo-item');
+            const floatingItems = stenocon.querySelectorAll('.floating-item');
 
             leftHalf.classList.remove('active');
             rightHalf.classList.remove('active');
-            leftCombo.classList.remove('visible', 'highlighted');
-            rightCombo.classList.remove('visible', 'highlighted');
+            floatingItems.forEach(item => item.classList.remove('visible', 'highlighted'));
         }
 
         function updateSwapVisuals() {
-            const swapped = modifierActive || pageSwitch;
-            document.querySelectorAll('.stenocon').forEach(stenocon => {
-                stenocon.querySelectorAll('.icon-normal, .label-normal').forEach(el => {
-                    el.style.display = swapped ? 'none' : '';
-                });
-                stenocon.querySelectorAll('.icon-swapped, .label-swapped').forEach(el => {
-                    el.style.display = swapped ? '' : 'none';
-                });
-            });
+            // With new design, swap only affects which item is highlighted
+            // Visual update happens in updateVisuals when buttons are pressed
         }
 
         // Store both name and icon for use slots
